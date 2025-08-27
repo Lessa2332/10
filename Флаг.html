@@ -1,182 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>notepad</title>
+  <meta charset="utf-8">
+  <title>AR Experience with Marker, PNG Image, Audio, and Exit Button</title>
+  <meta name="description" content="Web-based AR using AR.js and A-Frame: Marker-based with PNG image, audio playback, and exit button.">
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #ar-scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    #exit-button { 
+      position: absolute; 
+      bottom: 20px; 
+      left: 50%; 
+      transform: translateX(-50%); 
+      padding: 10px 20px; 
+      background-color: #ff0000; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      font-size: 16px; 
+      cursor: pointer; 
+      z-index: 10; 
+    }
+  </style>
 </head>
-<style type="text/css">
-ol,ul{
-display:block;
-list-style-type:none;
-margin:3px;
-}
-</style><body>
-<div>&lt;!DOCTYPE html&gt;<br>
-&lt;html lang="uk" allow="camera"&gt;<br>
-&lt;head&gt;<br>
-&nbsp; &lt;meta charset="UTF-8" /&gt;<br>
-&nbsp; &lt;meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /&gt;<br>
-&nbsp; &lt;title&gt;&#1057;&#1082;&#1083;&#1072;&#1076;&#1080; &#1087;&#1088;&#1072;&#1087;&#1086;&#1088; &#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1080;&lt;/title&gt;<br>
-<br>
-&nbsp; &lt;!-- &#9989; &#1042;&#1080;&#1087;&#1088;&#1072;&#1074;&#1083;&#1077;&#1085;&#1110; &#1087;&#1086;&#1089;&#1080;&#1083;&#1072;&#1085;&#1085;&#1103; (&#1073;&#1077;&#1079; &#1087;&#1088;&#1086;&#1073;&#1110;&#1083;&#1110;&#1074;) --&gt;<br>
-&nbsp; &lt;script src="https://aframe.io/releases/1.6.0/aframe.min.js"&gt;&lt;/script&gt;<br>
-&nbsp; &lt;script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.0/aframe/build/aframe-ar.js"&gt;&lt;/script&gt;<br>
-&nbsp; &lt;script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"&gt;&lt;/script&gt;<br>
-<br>
-&nbsp; &lt;style&gt;<br>
-&nbsp;&nbsp;&nbsp; html, body {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; margin: 0;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; padding: 0;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; width: 100%;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; height: 100%;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; overflow: hidden;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; touch-action: none;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; font-family: 'Comic Sans MS', cursive, sans-serif;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; background: transparent;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; a-scene {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; width: 100% !important;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; height: 100% !important;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; position: fixed;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; top: 0; left: 0;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; .overlay {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; position: fixed;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; top: 50%;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; left: 50%;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; transform: translate(-50%, -50%);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color: #FFD700;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; font-size: 2em;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; font-weight: bold;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; text-shadow: 2px 2px 6px #000;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z-index: 10;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; text-align: center;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; width: 90%;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; #success-screen {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display: none;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; position: absolute;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; top: 0; left: 0; width: 100%; height: 100%;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; background: linear-gradient(135deg, #ffecb3, #ffd54f);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; display: flex;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; flex-direction: column;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; justify-content: center;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; align-items: center;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; text-align: center;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; z-index: 100;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; #success-screen h1 {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; font-size: 40px;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color: #1565c0;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; animation: pop-in 1s;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; margin: 10px 0;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; .star-animation {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; font-size: 80px;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; animation: float 2s infinite alternate, spin 4s linear infinite;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; button {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; margin-top: 30px;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; padding: 15px 40px;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; font-size: 24px;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; background: #4CAF50;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; color: white;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; border: none;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; border-radius: 30px;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cursor: pointer;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }<br>
-&nbsp;&nbsp;&nbsp; @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }<br>
-&nbsp;&nbsp;&nbsp; @keyframes pop-in { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }<br>
-&nbsp;&nbsp;&nbsp; @media (max-width: 600px) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .overlay { font-size: 1.5em; }<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp; &lt;/style&gt;<br>
-&lt;/head&gt;<br>
-&lt;body&gt;<br>
-<br>
-&nbsp; &lt;div class="overlay"&gt;&#128241; &#1053;&#1072;&#1074;&#1077;&#1076;&#1080; &#1085;&#1072; &#1084;&#1072;&#1088;&#1082;&#1077;&#1088;! &#1044;&#1086;&#1079;&#1074;&#1086;&#1083;&#1100; &#1082;&#1072;&#1084;&#1077;&#1088;&#1091;.&lt;/div&gt;<br>
-<br>
-&nbsp; &lt;div id="success-screen"&gt;<br>
-&nbsp;&nbsp;&nbsp; &lt;h1&gt;&#127881; &#1042;&#1110;&#1090;&#1072;&#1102; &#1090;&#1077;&#1073;&#1077;!&lt;/h1&gt;<br>
-&nbsp;&nbsp;&nbsp; &lt;div class="star-animation"&gt;&#10024; &#127775; &#10024;&lt;/div&gt;<br>
-&nbsp;&nbsp;&nbsp; &lt;p style="font-size: 24px;"&gt;&#1058;&#1080; &#1089;&#1082;&#1083;&#1072;&#1074;(&#1083;&#1072;) &#1087;&#1088;&#1072;&#1087;&#1086;&#1088; &#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1080;! &#127482;&#127462;&lt;/p&gt;<br>
-&nbsp;&nbsp;&nbsp; &lt;button onclick="resetGame()"&gt;&#1057;&#1087;&#1088;&#1086;&#1073;&#1091;&#1074;&#1072;&#1090;&#1080; &#1097;&#1077; &#1088;&#1072;&#1079;&lt;/button&gt;<br>
-&nbsp; &lt;/div&gt;<br>
-<br>
-&nbsp; &lt;!-- &#9989; &#1042;&#1080;&#1087;&#1088;&#1072;&#1074;&#1083;&#1077;&#1085;&#1086;: emitevents, a-camera, video-src --&gt;<br>
-&nbsp; &lt;a-scene<br>
-&nbsp;&nbsp;&nbsp; embedded<br>
-&nbsp;&nbsp;&nbsp; arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: false; emitevents: true;"<br>
-&nbsp;&nbsp;&nbsp; vr-mode-ui="enabled: false"<br>
-&nbsp;&nbsp;&nbsp; device-orientation-permission-ui="enabled: true"<br>
-&nbsp; &gt;<br>
-&nbsp;&nbsp;&nbsp; &lt;a-camera<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rotation-reader<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; arjs-camera<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; video-src="default-camera"<br>
-&nbsp;&nbsp;&nbsp; &gt;&lt;/a-camera&gt;<br>
-<br>
-&nbsp;&nbsp;&nbsp; &lt;a-marker preset="hiro"&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;a-box id="blue-part" position="0.5 0.5 0" width="1" height="0.3" depth="0.1" color="#0057b7" class="aframe-draggable"&gt;&lt;/a-box&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;a-box id="yellow-part" position="-0.5 0.5 0" width="1" height="0.3" depth="0.1" color="#ffd700" class="aframe-draggable"&gt;&lt;/a-box&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;a-plane id="target-blue" visible="false" position="0 0.3 0" width="1.2" height="0.4"&gt;&lt;/a-plane&gt;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;a-plane id="target-yellow" visible="false" position="0 -0.1 0" width="1.2" height="0.4"&gt;&lt;/a-plane&gt;<br>
-&nbsp;&nbsp;&nbsp; &lt;/a-marker&gt;<br>
-&nbsp; &lt;/a-scene&gt;<br>
-<br>
-&nbsp; &lt;audio id="success-sound" src="https://www.soundjay.com/button/sounds/button-09.mp3"&gt;&lt;/audio&gt;<br>
-<br>
-&nbsp; &lt;script&gt;<br>
-&nbsp;&nbsp;&nbsp; const scanText = document.querySelector('.overlay');<br>
-<br>
-&nbsp;&nbsp;&nbsp; // &#1055;&#1086;&#1076;&#1110;&#1111; &#1084;&#1072;&#1088;&#1082;&#1077;&#1088;&#1072;<br>
-&nbsp;&nbsp;&nbsp; document.querySelector('a-marker').addEventListener('markerFound', () =&gt; {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanText.style.display = 'none';<br>
-&nbsp;&nbsp;&nbsp; });<br>
-<br>
-&nbsp;&nbsp;&nbsp; document.querySelector('a-marker').addEventListener('markerLost', () =&gt; {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanText.style.display = 'block';<br>
-&nbsp;&nbsp;&nbsp; });<br>
-<br>
-&nbsp;&nbsp;&nbsp; function checkPosition() {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const blue = document.getElementById('blue-part');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const yellow = document.getElementById('yellow-part');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const targetBlue = document.getElementById('target-blue');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const targetYellow = document.getElementById('target-yellow');<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!blue || !yellow || !targetBlue || !targetYellow) return;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const posBlue = blue.object3D.position;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const posYellow = yellow.object3D.position;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const posTgtBlue = targetBlue.object3D.position;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const posTgtYellow = targetYellow.object3D.position;<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const distBlue = posBlue.distanceTo(posTgtBlue);<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const distYellow = posYellow.distanceTo(posTgtYellow);<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (distBlue &lt; 0.2 &amp;&amp; distYellow &lt; 0.2) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanText.style.display = 'none';<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; document.getElementById('success-screen').style.display = 'flex';<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const sound = document.getElementById('success-sound');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sound.play().catch(e =&gt; console.log("&#1047;&#1074;&#1091;&#1082; &#1079;&#1072;&#1073;&#1083;&#1086;&#1082;&#1086;&#1074;&#1072;&#1085;&#1086;", e));<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
-&nbsp;&nbsp;&nbsp; }<br>
-<br>
-&nbsp;&nbsp;&nbsp; // &#1055;&#1077;&#1088;&#1077;&#1074;&#1110;&#1088;&#1082;&#1072; &#1087;&#1086;&#1079;&#1080;&#1094;&#1110;&#1111;<br>
-&nbsp;&nbsp;&nbsp; document.addEventListener('dragend', () =&gt; setTimeout(checkPosition, 100));<br>
-&nbsp;&nbsp;&nbsp; setInterval(checkPosition, 300);<br>
-<br>
-&nbsp;&nbsp;&nbsp; function resetGame() {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; document.getElementById('blue-part').setAttribute('position', '0.5 0.5 0');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; document.getElementById('yellow-part').setAttribute('position', '-0.5 0.5 0');<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; document.getElementById('success-screen').style.display = 'none';<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scanText.style.display = 'block';<br>
-&nbsp;&nbsp;&nbsp; }<br>
-&nbsp; &lt;/script&gt;<br>
-<br>
-&lt;/body&gt;<br>
-&lt;/html&gt;</div>
+<body>
+  <a-scene id="ar-scene" embedded arjs="sourceType: webcam; detectionMode: mono; trackingMethod: best; debugUIEnabled: false;">
+    <!-- Маркер (pattern-based, згенерований через AR.js generator) -->
+    <a-marker type="pattern" url="custom-marker.patt">
+      <!-- PNG зображення, що з'являється над маркером -->
+      <a-image src="logo.png" width="1" height="1" position="0 0 0" rotation="-90 0 0"></a-image>
+      
+      <!-- Аудіо, що відтворюється автоматично при виявленні маркера -->
+      <a-sound src="beep.mp3" autoplay="false" on="markerFound" position="0 0 0"></a-sound>
+    </a-marker>
+    
+    <!-- Камера для AR -->
+    <a-entity camera></a-entity>
+  </a-scene>
+  
+  <!-- Кнопка виходу (вихід з AR-режиму шляхом перезавантаження сторінки або зупинки камери) -->
+  <button id="exit-button" onclick="exitAR()">Вихід з AR</button>
+  
+  <script>
+    function exitAR() {
+      // Проста логіка виходу: перезавантаження сторінки для зупинки веб-камери
+      // Альтернатива: приховати сцену або зупинити AR.js, але для простоти - reload
+      location.reload();
+    }
+  </script>
 </body>
 </html>
